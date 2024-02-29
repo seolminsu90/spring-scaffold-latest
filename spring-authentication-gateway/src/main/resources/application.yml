@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: authentication-gateway
+  r2dbc: # 사용자 환경에 맞게 변경
+    url: r2dbc:mysql://YOUR_DATABASE:YOUR_DATABASE_PORT/authentication
+    username: root
+    password: 123123a
+#  cloud: # Using Eureka discovery
+#    gateway:
+#      discovery:
+#        locator:
+#          enabled: true
+
+
+logging:
+  level:
+    org:
+      springframework:
+        ldap: debug
+        r2dbc:
+          core: debug
+        boot.autoconfigure: error
+        cache: trace
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    enabled: false
+
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+# 사용자 환경에 맞게 변경
+ldap:
+  url: ldap://USER_LDAP_DOMAIN:PORT
+  base: USER_LDAP_BASE
+  username: USER_LDAP_ADMIN
+  password: USER_LOAP_PWD

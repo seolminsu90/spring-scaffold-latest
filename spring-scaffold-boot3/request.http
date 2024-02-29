@@ -1,0 +1,9 @@
+### 토큰 발급
+GET http://localhost:8080/tokens
+
+### 권한이 없이 가능한 요청
+GET http://localhost:8080/greeting
+
+### 권한이 필요한 요청
+GET http://localhost:8080/greeting/user
+X-Service-Token: eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IlNhbXBsZVVzZXIiLCJhdXRoTGlzdCI6WyJST0xFX1VTRVIiXSwiZXhwIjoxNzA4NTY0OTk2fQ._OZt6ov_p5HKmb5efL-MrIyIoILv91TcQXIzMMbVm4KJcz6Ax7iEO_tOyMaOdJ-5wuQUQFcjfqyZvkmgpZ1inQ
