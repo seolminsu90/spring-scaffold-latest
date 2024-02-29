@@ -29,8 +29,6 @@ Spring 3.x 기반의 샘플 모음
 - api token 인증 방식 프로젝트 샘플
 - Spring boot 3.2
 - jdk 21
-- QueryDSL 
-- JUnit5 mokito (미작성)
 
 기본 골격 프로젝트
 
