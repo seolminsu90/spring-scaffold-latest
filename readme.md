@@ -10,7 +10,7 @@
 
 
 ---
-## Spring scaffold authenfication gateway
+### Spring scaffold authenfication gateway
 
 게이트웨이가 모든 권한처리까지 하는 구조일 때 DB기반 동적 라우팅 로드 샘플
 Spring cloud gateway + dynamic routing sample
@@ -22,15 +22,27 @@ Spring cloud gateway + dynamic routing sample
 - 기타 설정은 생략함
 - spring data r2dbc 관련 메모
 
-## Spring scaffold boot3
+### Spring scaffold boot3
 
 Spring 3.x 기반의 샘플 모음
 
 - api token 인증 방식 프로젝트 샘플
 - Spring boot 3.2
 - jdk 21
+- docker 단일 빌드 샘플 포함
 
 기본 골격 프로젝트
+
+## 메모
+
+**gradlew: NOT FOUND 문제**
+
+가끔 window->linux 작업 시 gradlew이 포매팅문제가 있음.
+
+```
+RUN sed -i 's/\r$//' gradlew
+```
+
 
 [ref1]: https://github.com/seolminsu90/simple-atomikos-kotlin
 [ref2]: https://github.com/seolminsu90/spring-scaffold-old
