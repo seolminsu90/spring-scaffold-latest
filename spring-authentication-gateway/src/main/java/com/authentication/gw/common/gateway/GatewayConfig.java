@@ -48,9 +48,15 @@ public class GatewayConfig {
                        .method(apiRoute.getMethod());
         }
 
+
+        String serviceName = apiRoute.getService();
+        String serviceUri =  String.format("%s/%s", apiRoute.getUri(), serviceName);
+        String rewriteRegex = String.format("/%s/(?<segment>.*)", serviceName);
+
         UriSpec uriSpec = booleanSpec.filters(f -> f
+            .rewritePath(rewriteRegex, "/$\\{segment}")
             .filter(loggingGatewayFilterFactory.apply(defaultConfig), -1)
             .filter(authenticationGatewayFilterFactory.apply(config)));
-        return uriSpec.uri(apiRoute.getUri());
+        return uriSpec.uri(serviceUri);
     }
 }
