@@ -46,3 +46,11 @@ ldap:
   base: USER_LDAP_BASE
   username: USER_LDAP_ADMIN
   password: USER_LOAP_PWD
+
+springdoc:
+  enable-native-support: true
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html

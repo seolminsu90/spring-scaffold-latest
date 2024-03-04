@@ -38,6 +38,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.ldap/spring-ldap-core
     implementation("org.springframework.ldap:spring-ldap-core:3.2.2")
 
+    // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-webflux-ui
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0")
+
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
