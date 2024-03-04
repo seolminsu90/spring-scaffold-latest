@@ -9,6 +9,7 @@
 
 > 게이트웨이 필터에서 라우트 별 권한 처리를 전부 다 하고 있어서 router target들에는 spring security는 크게 의미가 있진 않은 상태임 (게이트웨이 API 보안 처리)
 > 라우트의 동적 등록, 갱신, 기본 필터 처리정도만 되어있다. 인증 및 예외 처리 응답 및 캐싱, fallback, 서킷브레이커 등 상세 설정은 알아서 따로 해야한다.
+> 어드민 페이지 등등 필요에 의해 구현하면 된다. (나중에 심심하면 thymeleaf 로 구축?)
 
 ![img.png](img.png)
 
@@ -33,6 +34,21 @@ public static final String SERVICE_ADMIN_CONTAINS_KEY = "ADMIN";    // 서비스
 public static final String ROLE_PREFIX = "ROLE_";                   // 권한 프리픽스 (내부 서비스 제어 용)
 ```
 > 권한의 설계는 정책별로 자유이며, 대강 이렇게도 된다는 식의 코드 부분부분적인 레벨을 제어
+
+#### 사용 예시
+
+1. authentication.api_service에 서비스를 등록한다.
+   - [service-name], [uri]
+   - uri는 프로토콜을 포함한다. ex) http://test.com, lb://EUREKA-SERVICE-NAME, lb:ws://EUREKA-SERVICE-NAME (websocket)
+2. authentication.api_route에 라우팅 대상을 등록한다.
+   - route_id는 식별할만한 유니크 키 ex) svs.post.read
+   - service는 서비스 구분키 이면서 eureka client application name이다.
+   - path는 /posts/** /posts/* 같은 패턴 방식이 가능하다.
+   - method는 현재는 단일 Method나, 내부 코드 수정을 통해 *과 같은 다중 처리의 형태도 추가할 수 있다. (현재 공백 => 전체 Method임)
+   - permit_all은 인증되지 않은 모든 사용자도 접근 가능하게 하는 Flag이다.
+3. 호출
+   - Method GW-HOST:GW-PORT/[service-name]/[service-api-routes] 의 방식으로 호출하면 된다.
+   - 내부 GW의 기능은 별도 정의된 SecurityConfig 및 권한 처리로 처리한다.
 
 
 ## spring data r2dbc

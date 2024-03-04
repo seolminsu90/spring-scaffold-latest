@@ -5,11 +5,11 @@ spring:
     url: r2dbc:mysql://YOUR_DATABASE:YOUR_DATABASE_PORT/authentication
     username: root
     password: 123123a
-#  cloud: # Using Eureka discovery
-#    gateway:
-#      discovery:
-#        locator:
-#          enabled: true
+  cloud: # Using Eureka discovery
+    gateway:
+      discovery:
+        locator:
+          enabled: true
 
 
 logging:
@@ -26,7 +26,7 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-    enabled: false
+    enabled: false # eureka enable?
 
 
 management:

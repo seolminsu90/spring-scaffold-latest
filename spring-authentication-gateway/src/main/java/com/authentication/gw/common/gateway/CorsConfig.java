@@ -1,4 +1,4 @@
-package com.authentication.gateway.common.gateway;
+package com.authentication.gw.common.gateway;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
