@@ -42,21 +42,23 @@ public class GatewayConfig {
             apiRoute.getService(), apiRoute.isPermitAll());
         LoggingGatewayFilterFactory.Config defaultConfig = new LoggingGatewayFilterFactory.Config();
 
-        BooleanSpec booleanSpec = predicateSpec.path(apiRoute.getPath());
+        // Route path /[serviceName]/[serviceApiPath] 로 지정
+        String serviceName = apiRoute.getService();
+        String servicePath = "/" + serviceName + apiRoute.getPath(); // getPath는 /로 시작하게 할것
+
+        BooleanSpec booleanSpec = predicateSpec.path(servicePath);
         if (StringUtils.hasLength(apiRoute.getMethod())) {
             booleanSpec.and()
                        .method(apiRoute.getMethod());
         }
 
-
-        String serviceName = apiRoute.getService();
-        String serviceUri =  String.format("%s/%s", apiRoute.getUri(), serviceName);
+        // /[serviceName]/~~ 을 통한 요청을 실제 서비스의 /~~ 요청으로 rewrite 해준다.
         String rewriteRegex = String.format("/%s/(?<segment>.*)", serviceName);
 
         UriSpec uriSpec = booleanSpec.filters(f -> f
             .rewritePath(rewriteRegex, "/$\\{segment}")
             .filter(loggingGatewayFilterFactory.apply(defaultConfig), -1)
             .filter(authenticationGatewayFilterFactory.apply(config)));
-        return uriSpec.uri(serviceUri);
+        return uriSpec.uri(apiRoute.getUri());
     }
 }
