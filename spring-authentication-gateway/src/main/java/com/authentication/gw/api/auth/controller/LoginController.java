@@ -5,6 +5,7 @@ import com.authentication.gw.api.auth.model.login.LoginRes;
 import com.authentication.gw.api.auth.service.LoginService;
 import com.authentication.gw.common.model.ApiResponse;
 import com.authentication.gw.common.model.ApiStatus;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/auth")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "인증")
 public class LoginController {
     private final LoginService loginService;
 

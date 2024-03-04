@@ -1,7 +1,9 @@
 package com.authentication.gw.api.gateway.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,6 +15,8 @@ import java.time.LocalDateTime;
 @Table(name = "api_log")
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ApiLog {
     @Id
     private Long seq;

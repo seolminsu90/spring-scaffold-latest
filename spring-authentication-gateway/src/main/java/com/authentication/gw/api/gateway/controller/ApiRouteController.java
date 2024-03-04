@@ -5,6 +5,7 @@ import com.authentication.gw.api.gateway.model.ApiRouteCreateReq;
 import com.authentication.gw.api.gateway.service.ApiRouteService;
 import com.authentication.gw.common.model.ApiResponse;
 import com.authentication.gw.common.model.ApiStatus;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.endpoint.RefreshEndpoint;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/routes")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "게이트웨이 라우트")
 public class ApiRouteController {
     private final ApiRouteService apiRouteService;
     private final RefreshEndpoint refreshEndpoint;

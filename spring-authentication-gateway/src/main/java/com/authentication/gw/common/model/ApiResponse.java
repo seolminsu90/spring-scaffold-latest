@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class ApiResponse<T> {
     private int status;
     private String msg;
+    private Long count;
     private T data;
 
     public ApiResponse(int status) {
@@ -32,8 +33,28 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
+    public ApiResponse(ApiStatus status, T data, Long count) {
+        this.status = status.getCode();
+        this.msg = status.getDesc();
+        this.data = data;
+        this.count = count;
+    }
+
     public ApiResponse(int status, T data) {
         this.status = status;
+        this.data = data;
+    }
+
+    public ApiResponse(int status, T data, Long count) {
+        this.status = status;
+        this.data = data;
+        this.count = count;
+    }
+
+    public ApiResponse(int status, T data, Long count, String msg) {
+        this.status = status;
+        this.msg = msg;
+        this.count = count;
         this.data = data;
     }
 

@@ -1,6 +1,7 @@
 package com.authentication.gw.api;
 
 import com.authentication.gw.common.util.JWTUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import java.util.Map;
 import static com.authentication.gw.common.ServiceConst.ADMIN_ROLE_NAME;
 
 @RestController
+@Tag(name = "샘플")
 public class SampleController {
 
     @GetMapping("/token/admin")
