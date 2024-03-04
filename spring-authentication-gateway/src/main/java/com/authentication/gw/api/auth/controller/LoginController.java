@@ -5,6 +5,7 @@ import com.authentication.gw.api.auth.model.login.LoginRes;
 import com.authentication.gw.api.auth.service.LoginService;
 import com.authentication.gw.common.model.ApiResponse;
 import com.authentication.gw.common.model.ApiStatus;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/token")
+    @Operation(summary = "공통 게이트웨이 로그인 인증")
     public Mono<ResponseEntity<ApiResponse<LoginRes>>> userLogin(@RequestBody @Valid LoginReq dto) {
         return loginService.login(dto)
                            .flatMap(loginResponse -> Mono.just(new ApiResponse<>(ApiStatus.SUCCESS, loginResponse)))

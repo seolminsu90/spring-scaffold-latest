@@ -2,9 +2,11 @@ package com.authentication.gw.api.gateway.controller;
 
 import com.authentication.gw.api.gateway.entity.ApiRoute;
 import com.authentication.gw.api.gateway.model.ApiRouteCreateReq;
+import com.authentication.gw.api.gateway.model.ApiRouteRes;
 import com.authentication.gw.api.gateway.service.ApiRouteService;
 import com.authentication.gw.common.model.ApiResponse;
 import com.authentication.gw.common.model.ApiStatus;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RequestMapping("/routes")
 @RestController
@@ -25,6 +29,7 @@ public class ApiRouteController {
 
     @Secured("ROLE_Admin")
     @PostMapping
+    @Operation(summary = "라우트 생성", description = "등록 후 라우트는 자동으로 갱신됩니다.")
     public Mono<ResponseEntity<ApiResponse<Long>>> create(@RequestBody @Valid ApiRouteCreateReq request) {
         return apiRouteService.upsertServiceAndRoutes(request.getService(), request.getUri(), request.getRoutes())
                               .map(res -> ResponseEntity.ok()
@@ -34,7 +39,19 @@ public class ApiRouteController {
                                                             .build());
     }
 
+    @GetMapping
+    @Operation(summary = "모든 라우트 조회")
+    public Mono<ResponseEntity<List<ApiRouteRes>>> getAll() {
+        return apiRouteService.getAll()
+                              .collectList()
+                              .map(routes -> ResponseEntity.ok()
+                                                           .body(routes))
+                              .defaultIfEmpty(ResponseEntity.notFound()
+                                                            .build());
+    }
+
     @GetMapping("/{routeId}")
+    @Operation(summary = "한개의 라우트 조회")
     public Mono<ResponseEntity<ApiRoute>> getById(@PathVariable("routeId") String routeId) {
         return apiRouteService.getByRouteId(routeId)
                               .map(route -> ResponseEntity.ok()
@@ -44,6 +61,7 @@ public class ApiRouteController {
     }
 
     @GetMapping("/refresh")
+    @Operation(summary = "라우트 갱신")
     public Mono<ResponseEntity<String>> refreshRoutes() {
         refreshEndpoint.refresh();
 
