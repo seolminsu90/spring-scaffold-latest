@@ -42,17 +42,21 @@ public class GatewayConfig {
             apiRoute.getService(), apiRoute.isPermitAll());
         LoggingGatewayFilterFactory.Config defaultConfig = new LoggingGatewayFilterFactory.Config();
 
-        // Route path /[serviceName]/[serviceApiPath] 로 지정
+
         String serviceName = apiRoute.getService();
-        String servicePath = "/" + serviceName + apiRoute.getPath(); // getPath는 /로 시작하게 할것
+        String servicePath = "/" + serviceName + apiRoute.getPath();
 
         BooleanSpec booleanSpec = predicateSpec.path(servicePath);
-        if (StringUtils.hasLength(apiRoute.getMethod())) {
-            booleanSpec.and()
-                       .method(apiRoute.getMethod());
+        if (StringUtils.hasLength(apiRoute.getMethod()) && !apiRoute.getMethod().equals("*")) {
+            // Empty == Allow All
+            if (apiRoute.getMethod().equals("!GET")) {
+                booleanSpec.and().method("POST", "DELETE", "HEAD", "PUT", "OPTIONS", "PATCH", "TRACE", "CONNECT");
+            } else {
+                booleanSpec.and().method(apiRoute.getMethod(), "HEAD", "OPTIONS");
+            }
         }
 
-        // /[serviceName]/~~ 을 통한 요청을 실제 서비스의 /~~ 요청으로 rewrite 해준다.
+
         String rewriteRegex = String.format("/%s/(?<segment>.*)", serviceName);
 
         UriSpec uriSpec = booleanSpec.filters(f -> f

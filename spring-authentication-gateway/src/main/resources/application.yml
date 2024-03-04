@@ -1,10 +1,10 @@
 spring:
   application:
     name: authentication-gateway
-  r2dbc: # 사용자 환경에 맞게 변경
-    url: r2dbc:mysql://YOUR_DATABASE:YOUR_DATABASE_PORT/authentication
-    username: root
-    password: 123123a
+  r2dbc:
+    url: r2dbc:mysql://[your-db-host]/authentication
+    username: [your-db-username]
+    password: [your-db-password]
   cloud: # Using Eureka discovery
     gateway:
       discovery:
@@ -25,8 +25,8 @@ logging:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
-    enabled: false # eureka enable?
+      defaultZone: http://[your-eureka-server-host]/eureka/
+    enabled: true
 
 
 management:
@@ -40,12 +40,13 @@ management:
       exposure:
         include: "*"
 
-# 사용자 환경에 맞게 변경
+
 ldap:
-  url: ldap://USER_LDAP_DOMAIN:PORT
-  base: USER_LDAP_BASE
-  username: USER_LDAP_ADMIN
-  password: USER_LOAP_PWD
+  url: ldap://[your-ldap-host]
+  base: [your-ldap-base]
+  username: [your-ldap-admin-name]
+  password: [your-ldap-admin-pwd]
+
 
 springdoc:
   enable-native-support: true

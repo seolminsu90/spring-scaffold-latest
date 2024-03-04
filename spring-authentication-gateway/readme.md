@@ -6,6 +6,7 @@
 - spring cloud gateway (netty)
 - spring security
 - 동적 route
+- swagger(openapi)
 
 > 게이트웨이 필터에서 라우트 별 권한 처리를 전부 다 하고 있어서 router target들에는 spring security는 크게 의미가 있진 않은 상태임 (게이트웨이 API 보안 처리)
 > 라우트의 동적 등록, 갱신, 기본 필터 처리정도만 되어있다. 인증 및 예외 처리 응답 및 캐싱, fallback, 서킷브레이커 등 상세 설정은 알아서 따로 해야한다.
@@ -49,6 +50,10 @@ public static final String ROLE_PREFIX = "ROLE_";                   // 권한 �
 3. 호출
    - Method GW-HOST:GW-PORT/[service-name]/[service-api-routes] 의 방식으로 호출하면 된다.
    - 내부 GW의 기능은 별도 정의된 SecurityConfig 및 권한 처리로 처리한다.
+
+#### swagger 
+
+> http://localhost:8080/swagger-ui.html
 
 
 ## spring data r2dbc
