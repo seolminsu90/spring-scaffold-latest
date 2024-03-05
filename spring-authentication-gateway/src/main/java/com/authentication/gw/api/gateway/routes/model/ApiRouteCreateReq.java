@@ -1,4 +1,4 @@
-package com.authentication.gw.api.gateway.model;
+package com.authentication.gw.api.gateway.routes.model;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.authentication.gw.api.gateway.entity;
+package com.authentication.gw.api.gateway.routes.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

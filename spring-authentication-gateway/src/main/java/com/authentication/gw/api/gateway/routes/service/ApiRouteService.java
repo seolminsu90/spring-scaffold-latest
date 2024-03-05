@@ -1,10 +1,10 @@
-package com.authentication.gw.api.gateway.service;
+package com.authentication.gw.api.gateway.routes.service;
 
-import com.authentication.gw.api.gateway.entity.ApiRoute;
-import com.authentication.gw.api.gateway.model.ApiRouteReq;
-import com.authentication.gw.api.gateway.model.ApiRouteRes;
-import com.authentication.gw.api.gateway.repository.ApiRouteRepository;
-import com.authentication.gw.api.gateway.repository.GatewayCommonRepository;
+import com.authentication.gw.api.gateway.routes.entity.ApiRoute;
+import com.authentication.gw.api.gateway.routes.model.ApiRouteReq;
+import com.authentication.gw.api.gateway.routes.model.ApiRouteRes;
+import com.authentication.gw.api.gateway.routes.repository.ApiRouteRepository;
+import com.authentication.gw.api.gateway.routes.repository.GatewayCommonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,13 +20,17 @@ import java.util.List;
 public class ApiRouteService {
 
     private final ApiRouteRepository apiRouteRepository;
-    private final GatewayCommonRepository gatewayCommonRepository;
     // private final MappingR2dbcConverter mappingR2dbcConverter; // https://godekdls.github.io/Spring%20Data%20R2DBC/mapping/
     // (중첩 지원 안해서 흠..)
 
     public Flux<ApiRouteRes> getAll() {
-        return gatewayCommonRepository.findAllRoutes();
+        return apiRouteRepository.findAllRoutes();
     }
+
+    public Flux<ApiRouteRes> getAllByService(String serviceName) {
+        return apiRouteRepository.findAllRoutes(serviceName);
+    }
+
 
     public Mono<ApiRoute> getByRouteId(String routeId) {
         return apiRouteRepository.findByRouteId(routeId);
@@ -34,7 +38,7 @@ public class ApiRouteService {
 
     @Transactional
     public Mono<Long> upsertServiceAndRoutes(String service, String uri, List<ApiRouteReq> routes) {
-        return gatewayCommonRepository.saveApiService(service, uri)
-                                      .flatMap(res -> gatewayCommonRepository.saveApiRouteReqs(service, routes));
+        return apiRouteRepository.saveApiService(service, uri)
+                                      .flatMap(res -> apiRouteRepository.saveApiRouteReqs(service, routes));
     }
 }

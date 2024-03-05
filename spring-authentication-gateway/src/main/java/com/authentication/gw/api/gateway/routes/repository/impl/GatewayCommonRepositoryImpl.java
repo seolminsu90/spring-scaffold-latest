@@ -1,16 +1,19 @@
-package com.authentication.gw.api.gateway.repository;
+package com.authentication.gw.api.gateway.routes.repository.impl;
 
-import com.authentication.gw.api.gateway.model.ApiRouteReq;
-import com.authentication.gw.api.gateway.model.ApiRouteRes;
+import com.authentication.gw.api.gateway.routes.model.ApiRouteReq;
+import com.authentication.gw.api.gateway.routes.model.ApiRouteRes;
+import com.authentication.gw.api.gateway.routes.repository.GatewayCommonRepository;
 import com.authentication.gw.common.ServiceConst;
 import com.authentication.gw.common.error.ApiException;
 import com.authentication.gw.common.model.ApiStatus;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -25,22 +28,35 @@ public class GatewayCommonRepositoryImpl implements GatewayCommonRepository {
 
     @Override
     public Flux<ApiRouteRes> findAllRoutes() {
+        return findAllRoutes(null);
+    }
+
+    @Override
+    public Flux<ApiRouteRes> findAllRoutes(@Nullable String serviceName) {
         var findAllApiRouteSQL = """
                 SELECT r.*, s.uri from api_route r
                 INNER JOIN  api_service s
                 ON r.service = s.service
             """;
 
-        return databaseClient.sql(findAllApiRouteSQL)
-                             .map((row, meta) -> ApiRouteRes.builder()
-                                                            .routeId(row.get("route_id", String.class))
-                                                            .service(row.get("service", String.class))
-                                                            .path(row.get("path", String.class))
-                                                            .uri(row.get("uri", String.class))
-                                                            .method(row.get("method", String.class))
-                                                            .permitAll(row.get("permit_all", Integer.class))
-                                                            .build())
-                             .all();
+        DatabaseClient.GenericExecuteSpec spec;
+        if (StringUtils.hasLength(serviceName)) {
+            findAllApiRouteSQL += " WHERE s.service = :serviceName";
+            spec = databaseClient.sql(findAllApiRouteSQL)
+                                 .bind("serviceName", serviceName);
+        } else {
+            spec = databaseClient.sql(findAllApiRouteSQL);
+        }
+
+        return spec.map((row, meta) -> ApiRouteRes.builder()
+                                                  .routeId(row.get("route_id", String.class))
+                                                  .service(row.get("service", String.class))
+                                                  .path(row.get("path", String.class))
+                                                  .uri(row.get("uri", String.class))
+                                                  .method(row.get("method", String.class))
+                                                  .permitAll(row.get("permit_all", Integer.class))
+                                                  .build())
+                   .all();
     }
 
     @Override

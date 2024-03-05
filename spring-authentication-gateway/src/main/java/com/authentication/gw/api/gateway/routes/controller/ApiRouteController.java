@@ -1,9 +1,9 @@
-package com.authentication.gw.api.gateway.controller;
+package com.authentication.gw.api.gateway.routes.controller;
 
-import com.authentication.gw.api.gateway.entity.ApiRoute;
-import com.authentication.gw.api.gateway.model.ApiRouteCreateReq;
-import com.authentication.gw.api.gateway.model.ApiRouteRes;
-import com.authentication.gw.api.gateway.service.ApiRouteService;
+import com.authentication.gw.api.gateway.routes.entity.ApiRoute;
+import com.authentication.gw.api.gateway.routes.model.ApiRouteCreateReq;
+import com.authentication.gw.api.gateway.routes.model.ApiRouteRes;
+import com.authentication.gw.api.gateway.routes.service.ApiRouteService;
 import com.authentication.gw.common.model.ApiResponse;
 import com.authentication.gw.common.model.ApiStatus;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,6 +38,8 @@ public class ApiRouteController {
                               .defaultIfEmpty(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                                             .build());
     }
+
+    // 아래의 API들은 없어져도 됨
 
     @GetMapping
     @Operation(summary = "모든 라우트 조회")

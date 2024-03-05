@@ -1,4 +1,4 @@
-package com.authentication.gw.api.gateway.model;
+package com.authentication.gw.api.gateway.routes.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

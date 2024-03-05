@@ -1,6 +1,7 @@
-package com.authentication.gw.api.auth.repository;
+package com.authentication.gw.api.auth.repository.impl;
 
 import com.authentication.gw.api.auth.model.login.LoginAuthUserServiceRes;
+import com.authentication.gw.api.auth.repository.AuthUserServiceCustomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,7 @@ import static com.authentication.gw.common.ServiceConst.SERVICE_ADMIN_CONTAINS_K
 @RequiredArgsConstructor
 @Repository
 @Transactional
-public class AuthCommonRepositoryImpl implements AuthCommonRepository {
+public class AuthUserServiceCustomRepositoryImpl implements AuthUserServiceCustomRepository {
     private final DatabaseClient databaseClient;
 
     @Override

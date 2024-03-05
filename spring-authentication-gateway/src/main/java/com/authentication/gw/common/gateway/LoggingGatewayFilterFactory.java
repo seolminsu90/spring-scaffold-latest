@@ -1,8 +1,8 @@
 package com.authentication.gw.common.gateway;
 
 
-import com.authentication.gw.api.gateway.entity.ApiLog;
-import com.authentication.gw.api.gateway.service.ApiLogService;
+import com.authentication.gw.api.gateway.logs.entity.ApiLog;
+import com.authentication.gw.api.gateway.logs.service.ApiLogService;
 import com.authentication.gw.common.model.SessionUserDetails;
 import com.authentication.gw.common.util.JWTUtil;
 import lombok.RequiredArgsConstructor;

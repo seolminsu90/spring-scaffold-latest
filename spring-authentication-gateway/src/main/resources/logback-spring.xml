@@ -13,6 +13,9 @@
     </appender>
 
     <logger name="org.springframework" level="info" />
+    <logger name="io.r2dbc.spi" level="debug" />
+    <logger name="io.r2dbc.mysql" level="debug" />
+
     <logger name="com.netflix.eureka" level="OFF" />
 
     <root level="info">

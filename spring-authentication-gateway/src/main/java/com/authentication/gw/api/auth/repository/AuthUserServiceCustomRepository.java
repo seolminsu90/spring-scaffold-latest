@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
-public interface AuthCommonRepository {
+public interface AuthUserServiceCustomRepository {
     Mono<Long> saveAuthUserService(String uid, String service, String role);
 
     Mono<LoginAuthUserServiceRes> findAuthUserServiceRole(String uid, String service);

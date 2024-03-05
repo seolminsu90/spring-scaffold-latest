@@ -1,4 +1,4 @@
-package com.authentication.gw.api.gateway.entity;
+package com.authentication.gw.api.gateway.logs.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

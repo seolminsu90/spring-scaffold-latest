@@ -1,7 +1,7 @@
-package com.authentication.gw.api.gateway.service;
+package com.authentication.gw.api.gateway.logs.service;
 
-import com.authentication.gw.api.gateway.entity.ApiLog;
-import com.authentication.gw.api.gateway.repository.ApiLogRepository;
+import com.authentication.gw.api.gateway.logs.entity.ApiLog;
+import com.authentication.gw.api.gateway.logs.repository.ApiLogRepository;
 import com.authentication.gw.common.model.ApiResponse;
 import com.authentication.gw.common.model.ApiStatus;
 import lombok.RequiredArgsConstructor;

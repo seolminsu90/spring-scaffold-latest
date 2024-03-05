@@ -1,6 +1,6 @@
-package com.authentication.gw.api.gateway.repository;
+package com.authentication.gw.api.gateway.logs.repository;
 
-import com.authentication.gw.api.gateway.entity.ApiLog;
+import com.authentication.gw.api.gateway.logs.entity.ApiLog;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.r2dbc.repository.Modifying;

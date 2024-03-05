@@ -13,6 +13,7 @@ public enum ApiStatus {
     UNAUTHORIZED_TOKEN_VERIFY_FAIL(4005, "인증이 실패하였습니다. - 토큰 검증에 실패했습니다."),
     FORBIDDEN(4006, "기능을 사용할 수 있는 권한이 없습니다."),
     BAD_REQUEST_ROUTE_ID(4007, "라우트 아이디 (권한)은 시스템 어드민 ROLE 이름과 같을 수 없습니다."),
+    BAD_REQUEST_ROLE_UPDATE_FAIL(4008, "잘못된 요청입니다. - 권한 설정에 실패했습니다."),
     INTERNAL_SERVER_ERROR(5000, "내부 서버 오류");
 
     private final int code;

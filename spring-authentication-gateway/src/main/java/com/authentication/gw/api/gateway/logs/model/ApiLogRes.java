@@ -1,6 +1,6 @@
-package com.authentication.gw.api.gateway.model;
+package com.authentication.gw.api.gateway.logs.model;
 
-import com.authentication.gw.api.gateway.entity.ApiLog;
+import com.authentication.gw.api.gateway.logs.entity.ApiLog;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

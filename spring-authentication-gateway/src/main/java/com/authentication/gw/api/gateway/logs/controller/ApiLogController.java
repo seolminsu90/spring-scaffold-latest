@@ -1,7 +1,7 @@
-package com.authentication.gw.api.gateway.controller;
+package com.authentication.gw.api.gateway.logs.controller;
 
-import com.authentication.gw.api.gateway.entity.ApiLog;
-import com.authentication.gw.api.gateway.service.ApiLogService;
+import com.authentication.gw.api.gateway.logs.entity.ApiLog;
+import com.authentication.gw.api.gateway.logs.service.ApiLogService;
 import com.authentication.gw.common.model.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

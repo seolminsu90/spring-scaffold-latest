@@ -1,7 +1,7 @@
 package com.authentication.gw.common.gateway;
 
-import com.authentication.gw.api.gateway.model.ApiRouteRes;
-import com.authentication.gw.api.gateway.service.ApiRouteService;
+import com.authentication.gw.api.gateway.routes.model.ApiRouteRes;
+import com.authentication.gw.api.gateway.routes.service.ApiRouteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
