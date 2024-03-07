@@ -1,21 +1,21 @@
-version: "3.5"
+version: '3.5'
 services:
-  backend:
-    container_name: scaffold
-    build:
-      context: .
-      dockerfile: Dockerfile_WithBuild
-    expose:
-      - 8080
-    ports:
-      - 8080:8080
-    #    depends_on:
-    #      - anyServices
-    restart: always
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    networks:
-      - service-network
+    backend:
+        container_name: scaffold
+        build:
+            context: .
+            dockerfile: Dockerfile_WithBuild2
+        expose:
+            - 8080
+        ports:
+            - 8080:8080
+        #    depends_on:
+        #      - anyServices
+        restart: always
+        environment:
+            - SPRING_PROFILES_ACTIVE=docker
+        networks:
+            - service-network
 networks:
-  service-network:
-    driver: bridge
+    service-network:
+        driver: bridge
