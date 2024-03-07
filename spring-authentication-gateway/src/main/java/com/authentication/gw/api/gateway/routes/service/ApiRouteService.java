@@ -4,7 +4,6 @@ import com.authentication.gw.api.gateway.routes.entity.ApiRoute;
 import com.authentication.gw.api.gateway.routes.model.ApiRouteReq;
 import com.authentication.gw.api.gateway.routes.model.ApiRouteRes;
 import com.authentication.gw.api.gateway.routes.repository.ApiRouteRepository;
-import com.authentication.gw.api.gateway.routes.repository.GatewayCommonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,12 +32,12 @@ public class ApiRouteService {
 
 
     public Mono<ApiRoute> getByRouteId(String routeId) {
-        return apiRouteRepository.findByRouteId(routeId);
+        return apiRouteRepository.findById(routeId);
     }
 
     @Transactional
     public Mono<Long> upsertServiceAndRoutes(String service, String uri, List<ApiRouteReq> routes) {
         return apiRouteRepository.saveApiService(service, uri)
-                                      .flatMap(res -> apiRouteRepository.saveApiRouteReqs(service, routes));
+                                 .flatMap(res -> apiRouteRepository.saveApiRouteReqs(service, routes));
     }
 }
