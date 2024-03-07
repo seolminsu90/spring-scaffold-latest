@@ -11,8 +11,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
-import static com.authentication.gw.common.ServiceConst.ADMIN_ROLE_NAME;
-import static com.authentication.gw.common.ServiceConst.SERVICE_ADMIN_CONTAINS_KEY;
+import static com.authentication.gw.common.ServiceConst.*;
 
 @RequiredArgsConstructor
 @Repository
@@ -56,8 +55,7 @@ public class AuthUserServiceCustomRepositoryImpl implements AuthUserServiceCusto
         if (role.getRole()
                 .equals(ADMIN_ROLE_NAME)) return Flux.empty();
 
-        if (role.getRole()
-                .contains(SERVICE_ADMIN_CONTAINS_KEY)) {
+        if (role.getRole().equals(SERVICE_ADMIN_KEY)) {
             var findRoleAndAuthorityByUidSQL = """
                     SELECT r.route_id as authority FROM api_route r
                     WHERE service = :service

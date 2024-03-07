@@ -29,8 +29,8 @@
 ```
 public static final String DEFAULT_ROLE_NAME = "NONE";              // 기본 권한 이름
 public static final String ADMIN_ROLE_NAME = "SYSADMIN";            // 슈퍼 어드민 이름 (권한 리스트 제외 - 게이트웨이 필터부터 모두 통과처리)
-public static final String SERVICE_ADMIN_CONTAINS_KEY = "ADMIN";    // 서비스 관리자 이름 (auth_role에 서비스별로 정의 ex- LOGIN_ADMIN)
-                                                                    // 해당 키가 포함된 auth_role을 가진 유저는 해당 서비스의 모든 권한을 부여받는다
+public static final String SERVICE_ADMIN_KEY = "SERVICE_ADMIN";    // 서비스 관리자 이름 (auth_role에 서비스별로 정의 ex- LOGIN_ADMIN)
+                                                                    // 해당 권한 유저는 해당 서비스의 모든 권한을 부여받는다
                                                                     // 일반 유저와 동일하게 필터를 거치나, 권한을 모두 갖는 케이스
 public static final String ROLE_PREFIX = "ROLE_";                   // 권한 프리픽스 (내부 서비스 제어 용)
 ```
