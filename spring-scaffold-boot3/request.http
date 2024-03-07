@@ -6,4 +6,4 @@ GET http://localhost:8080/greeting
 
 ### 권한이 필요한 요청
 GET http://localhost:8080/greeting/user
-X-Service-Token: eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IlNhbXBsZVVzZXIiLCJhdXRoTGlzdCI6WyJST0xFX1VTRVIiXSwiZXhwIjoxNzA4NTY0OTk2fQ._OZt6ov_p5HKmb5efL-MrIyIoILv91TcQXIzMMbVm4KJcz6Ax7iEO_tOyMaOdJ-5wuQUQFcjfqyZvkmgpZ1inQ
+X-Service-Token: eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IlNhbXBsZVVzZXIiLCJhdXRoTGlzdCI6WyJST0xFX1VTRVIiXSwiZXhwIjoxNzA5NzkzNTE4fQ.bOCbqD__WZdL6M-4NH-epv3Ka2TclgdLZhxG3d_EId7_CMftFKU2qJy-3nsezmnXZRmNmX0L6LIfMT5TOmEfeA
