@@ -12,8 +12,7 @@ public class ApiRoute {
     @Id
     @Column("route_id")
     private String routeId;
-    @Transient
-    private ApiService service;
+    private String service;
     private String path;
     private String method;
     private String desc;
