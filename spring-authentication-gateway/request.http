@@ -18,7 +18,7 @@ Content-Type: application/json
 ### 인증 요청 테스트
 GET http://localhost:8080/token/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiU1lTQURNSU4iLCJhdXRoIjpbXSwiaWQiOiJtc3VzZW9sIiwiZXhwIjoxNzA5MTkyODI3fQ.JsYfdp8hbp--FiXDQFdgwrotVDb4EzLWow0sKclcbpiV_HCwbjpxCL9_pINl8kCgjWSeKizPEycOkxqZoQ8gNA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiU1lTQURNSU4iLCJhdXRoIjpbXSwiaWQiOiJtc3VzZW9sIiwiZXhwIjoxNzA5NzkzMzUzfQ.wlZjyIZK3SvQ9nm6dpfGoyL4nddnj1FWY5hJFSiCYyDXLQWpOcjm5ZPWaO5nLlwO1OgY4Z_XP-wfh20sosOWEQ
 
 
 ### 인증 요청 테스트2

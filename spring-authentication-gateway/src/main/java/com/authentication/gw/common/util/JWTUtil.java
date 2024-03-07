@@ -8,6 +8,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.*;
 
 import static com.authentication.gw.common.ServiceConst.ROLE_PREFIX;
@@ -17,7 +20,9 @@ public class JWTUtil {
         throw new UnsupportedOperationException();
     }
 
-    private static final String JWT_SIGN_KEY = "mysignkey";
+    private static final String JWT_SIGN_KEY_STRING = "mysignkey";
+    private static final Key JWT_SIGN_KEY = new SecretKeySpec(JWT_SIGN_KEY_STRING.getBytes(StandardCharsets.UTF_8),
+        "HmacSHA512");
     private static final int EXPIRED = 30; // 30분 만료.
 
     public static String createToken(String userId, String role, List<String> authority) {
