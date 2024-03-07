@@ -59,7 +59,7 @@ public class CustomRestExceptionHandler extends ResponseStatusExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Mono<ResponseEntity<ApiResponse<?>>> handleException(Exception ex) {
         ex.printStackTrace();
-        ApiResponse<?> res = new ApiResponse<>(ApiStatus.INTERNAL_SERVER_ERROR);
+        ApiResponse<String> res = new ApiResponse<>(ApiStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                        .contentType(MediaType.APPLICATION_JSON)
                                        .body(res));
