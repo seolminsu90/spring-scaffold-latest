@@ -2,6 +2,7 @@ package com.authentication.gw.api.auth.service;
 
 import com.authentication.gw.api.auth.entity.AuthUser;
 import com.authentication.gw.api.auth.model.auth.AuthUserServiceRes;
+import com.authentication.gw.api.auth.model.auth.AuthUserWithRole;
 import com.authentication.gw.api.auth.model.login.LoginAuthUserServiceRes;
 import com.authentication.gw.api.auth.model.login.LoginReq;
 import com.authentication.gw.api.auth.model.login.LoginRes;
@@ -103,8 +104,8 @@ public class AuthService {
         return user;
     }
 
-    public Flux<AuthUser> findAllUser(@Nullable String service) {
-        return authUserRepository.findAllUserByServiceName(service);
+    public Flux<AuthUserWithRole> findAllUser(@Nullable String service) {
+        return authUserServiceRepository.findAllUserByServiceName(service);
     }
 
     public Mono<AuthUserServiceRes> saveUserServiceRole(String uid, String service, String role) {

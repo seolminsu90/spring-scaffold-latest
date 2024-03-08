@@ -1,5 +1,7 @@
 package com.authentication.gw.api.auth.repository.impl;
 
+import com.authentication.gw.api.auth.entity.AuthUser;
+import com.authentication.gw.api.auth.model.auth.AuthUserWithRole;
 import com.authentication.gw.api.auth.model.login.LoginAuthUserServiceRes;
 import com.authentication.gw.api.auth.repository.AuthUserServiceCustomRepository;
 import lombok.RequiredArgsConstructor;
@@ -79,6 +81,28 @@ public class AuthUserServiceCustomRepositoryImpl implements AuthUserServiceCusto
         return databaseClient.sql(findRoleAndAuthorityByUidSQL)
                              .bind("authRole", role.getRole())
                              .fetch()
+                             .all();
+    }
+
+    @Override
+    public Flux<AuthUserWithRole> findAllUserByServiceName(String service) {
+        var findAllUserByServiceNameSQL = """
+                SELECT a.*, b.role FROM auth_user a INNER JOIN auth_user_service b
+                ON a.uid = b.uid AND b.service = :service
+            """;
+
+        return databaseClient.sql(findAllUserByServiceNameSQL)
+                             .bind("service", service)
+                             .map((row, meta) -> {
+                                 AuthUser user = AuthUser.builder()
+                                                         .name(row.get("name", String.class))
+                                                         .uid(row.get("uid", String.class))
+                                                         .email(row.get("email", String.class))
+                                                         .title(row.get("title", String.class))
+                                                         .isAdmin(row.get("is_admin", Integer.class))
+                                                         .build();
+                                 return new AuthUserWithRole(user, row.get("role", String.class));
+                             })
                              .all();
     }
 }

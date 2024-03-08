@@ -37,7 +37,7 @@ public class AuthController {
 
     @GetMapping("/users")
     @Operation(summary = "모든 유저 조회")
-    public Mono<ResponseEntity<List<AuthUserRes>>> getAllUsersByService(@RequestParam(name="service", required = false) String service) {
+    public Mono<ResponseEntity<List<AuthUserRes>>> getAllUsersByService(@RequestParam(name="service") String service) {
         return authService.findAllUser(service)
                           .map(AuthUserRes::of)
                           .collectList()

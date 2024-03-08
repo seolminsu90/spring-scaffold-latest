@@ -1,5 +1,6 @@
 package com.authentication.gw.api.auth.repository;
 
+import com.authentication.gw.api.auth.model.auth.AuthUserWithRole;
 import com.authentication.gw.api.auth.model.login.LoginAuthUserServiceRes;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -12,4 +13,6 @@ public interface AuthUserServiceCustomRepository {
     Mono<LoginAuthUserServiceRes> findAuthUserServiceRole(String uid, String service);
 
     Flux<Map<String, Object>> findRoleAndAuthority(LoginAuthUserServiceRes role);
+
+    Flux<AuthUserWithRole> findAllUserByServiceName(String service);
 }
