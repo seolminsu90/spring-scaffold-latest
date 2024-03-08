@@ -106,11 +106,7 @@ public class JWTUtil {
 
     public static Collection<GrantedAuthority> setAuthorities(List<String> auth_list) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-
-        auth_list.stream()
-                 .forEach(authority -> {
-                     authorities.add(new SimpleGrantedAuthority(authority));
-                 });
+        auth_list.forEach(authority -> authorities.add(new SimpleGrantedAuthority(authority)));
 
         return authorities;
     }

@@ -43,7 +43,7 @@ public class GatewayConfig {
         LoggingGatewayFilterFactory.Config defaultConfig = new LoggingGatewayFilterFactory.Config();
 
 
-        String serviceName = apiRoute.getService();
+        String serviceName = apiRoute.getService().toUpperCase();
         String servicePath = "/" + serviceName + apiRoute.getPath();
 
         BooleanSpec booleanSpec = predicateSpec.path(servicePath);

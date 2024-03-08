@@ -11,9 +11,14 @@ Content-Type: application/json
 GET http://localhost:8080/token/admin
 Content-Type: application/json
 
+
 ### 인증 요청 테스트
-GET http://localhost:8080/token/me
+POST http://localhost:8080/SAMPLE/hello
 Content-Type: application/json
+
+{
+  "Logging": "Hi"
+}
 
 ### 인증 요청 테스트
 GET http://localhost:8080/token/me

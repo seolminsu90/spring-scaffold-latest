@@ -3,6 +3,8 @@ package com.authentication.gw.common.gateway;
 
 import com.authentication.gw.api.gateway.logs.entity.ApiLog;
 import com.authentication.gw.api.gateway.logs.service.ApiLogService;
+import com.authentication.gw.common.logging.LoggingRequestDecorator;
+import com.authentication.gw.common.logging.LoggingWebExchange;
 import com.authentication.gw.common.model.SessionUserDetails;
 import com.authentication.gw.common.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.Objects;
@@ -27,41 +30,33 @@ public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory<Lo
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             var request = exchange.getRequest();
-            log.info("Request URI: {}", request.getURI());
-            log.info("Request Method: {}", request.getMethod());
-            log.info("Request Headers: {}", request.getHeaders());
-
             SessionUserDetails user = getAuthenticationFromHeader(request);
-            if (user != null) {
-                exchange.getAttributes()
-                        .put("user", user);
-            }
+            if (user != null) exchange.getAttributes().put("user", user);
 
-            String txid = String.valueOf(UUID.randomUUID());
-
-            var requestLog = ApiLog.builder()
-                                   .txid(txid)
-                                   .username(user == null ? "" : user.getUsername())
-                                   .uri(request.getURI()
-                                               .toString())
-                                   .method(request.getMethod()
-                                                  .toString())
-                                   .build();
-
-            apiLogService.saveApiLog(requestLog)
-                         .subscribe();
-
-            return chain.filter(exchange)
-                        .publishOn(Schedulers.boundedElastic())
-                        .doOnSuccess(s -> {
-                            var response = exchange.getResponse();
-                            log.info("Response Status: {}", response.getStatusCode());
-
-                            apiLogService.updateApiLogByTxid(txid, Objects.requireNonNull(response.getStatusCode())
-                                                                          .value())
+            return chain.filter(exchange).publishOn(Schedulers.boundedElastic())
+                        .doOnTerminate(() -> {
+                            apiLogService.saveApiLog(createLog(user, exchange))
+                                         .subscribeOn(Schedulers.boundedElastic())
                                          .subscribe();
-                        });
+                        })
+                        .then();
         };
+    }
+
+    private ApiLog createLog(SessionUserDetails user, ServerWebExchange exchange) {
+        var request = exchange.getRequest();
+        var response = exchange.getResponse();
+        var loggingExchange = (LoggingWebExchange) exchange;
+        var loggingRequestDecorator = (LoggingRequestDecorator) loggingExchange.getRequest();
+
+        log.info("Request Body: {}", loggingRequestDecorator.getCachedBody());
+        log.info("Response Status: {}", response.getStatusCode());
+
+        String txid = String.valueOf(UUID.randomUUID());
+        return ApiLog.builder().txid(txid).username(user == null ? "" : user.getUsername())
+                     .uri(request.getURI().toString()).method(request.getMethod().toString())
+                     .code(Objects.requireNonNull(response.getStatusCode()).value())
+                     .params(loggingRequestDecorator.getCachedBody()).build();
     }
 
     private SessionUserDetails getAuthenticationFromHeader(ServerHttpRequest request) {
