@@ -17,6 +17,7 @@ import com.authentication.gw.common.util.JWTUtil;
 import io.r2dbc.spi.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,8 +103,8 @@ public class AuthService {
         return user;
     }
 
-    public Flux<AuthUser> findAllUser() {
-        return authUserRepository.findAll();
+    public Flux<AuthUser> findAllUser(@Nullable String service) {
+        return authUserRepository.findAllUserByServiceName(service);
     }
 
     public Mono<AuthUserServiceRes> saveUserServiceRole(String uid, String service, String role) {
