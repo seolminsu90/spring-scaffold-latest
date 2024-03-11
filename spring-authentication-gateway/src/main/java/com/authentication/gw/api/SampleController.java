@@ -26,6 +26,8 @@ public class SampleController {
         return Mono.just(JWTUtil.createToken("Admin", ADMIN_ROLE_NAME, new ArrayList<>()));
     }
 
+    // @Secured({"ROLE_SERVICE_ADMIN", "ROLE_SYSADMIN"}) -- Not Work !
+    // @PreAuthorize("hasAnyRole('SERVICE_ADMIN', 'SYSADMIN')") --- Work !
     @PreAuthorize("hasRole('SYSADMIN')")
     @GetMapping("/token/me")
     public Mono<Map<String, Object>> getSessionData22() {
@@ -43,7 +45,7 @@ public class SampleController {
                                             });
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_SYSADMIN', 'SYSADMIN')")// @PreAutorize 는 안되는데 왜그렇지?
+    @PreAuthorize("hasAnyRole('SERVICE_ADMIN', 'SYSADMIN')")// @PreAutorize 는 안되는데 왜그렇지?
     @GetMapping("/token/me2")
     public Mono<Map<String, Object>> getSessionData2(@AuthenticationPrincipal Mono<Authentication> auth) {
         return auth

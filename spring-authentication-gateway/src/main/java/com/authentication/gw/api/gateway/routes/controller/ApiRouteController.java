@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.endpoint.RefreshEndpoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -27,7 +26,6 @@ public class ApiRouteController {
     private final ApiRouteService apiRouteService;
     private final RefreshEndpoint refreshEndpoint;
 
-    @Secured("ROLE_Admin")
     @PostMapping
     @Operation(summary = "라우트 생성", description = "등록 후 라우트는 자동으로 갱신됩니다.")
     public Mono<ResponseEntity<ApiResponse<Long>>> create(@RequestBody @Valid ApiRouteCreateReq request) {

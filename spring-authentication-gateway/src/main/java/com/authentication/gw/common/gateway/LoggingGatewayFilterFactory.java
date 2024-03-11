@@ -34,11 +34,9 @@ public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory<Lo
             if (user != null) exchange.getAttributes().put("user", user);
 
             return chain.filter(exchange).publishOn(Schedulers.boundedElastic())
-                        .doOnTerminate(() -> {
-                            apiLogService.saveApiLog(createLog(user, exchange))
-                                         .subscribeOn(Schedulers.boundedElastic())
-                                         .subscribe();
-                        })
+                        .doOnTerminate(() -> apiLogService.saveApiLog(createLog(user, exchange))
+                                                      .subscribeOn(Schedulers.boundedElastic())
+                                                      .subscribe())
                         .then();
         };
     }
@@ -52,8 +50,8 @@ public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory<Lo
         log.info("Request Body: {}", loggingRequestDecorator.getCachedBody());
         log.info("Response Status: {}", response.getStatusCode());
 
-        String txid = String.valueOf(UUID.randomUUID());
-        return ApiLog.builder().txid(txid).username(user == null ? "" : user.getUsername())
+        String txId = String.valueOf(UUID.randomUUID());
+        return ApiLog.builder().txid(txId).username(user == null ? "" : user.getUsername())
                      .uri(request.getURI().toString()).method(request.getMethod().toString())
                      .code(Objects.requireNonNull(response.getStatusCode()).value())
                      .params(loggingRequestDecorator.getCachedBody()).build();
@@ -64,9 +62,7 @@ public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory<Lo
                               .getFirst("Authorization");
 
         if (token == null) return null;
-        if (token.startsWith("Bearer")) {
-            token = token.replace("Bearer ", "");
-        }
+        if (token.startsWith("Bearer")) token = token.replace("Bearer ", "");
 
         return JWTUtil.checkToken(token);
     }

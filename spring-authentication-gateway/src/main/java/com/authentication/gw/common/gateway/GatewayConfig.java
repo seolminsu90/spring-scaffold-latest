@@ -43,17 +43,12 @@ public class GatewayConfig {
         LoggingGatewayFilterFactory.Config defaultConfig = new LoggingGatewayFilterFactory.Config();
 
 
-        String serviceName = apiRoute.getService().toUpperCase();
+        String serviceName = apiRoute.getService().toUpperCase(); // Eureka Default Service => UPPERCASE 라서 맞추기
         String servicePath = "/" + serviceName + apiRoute.getPath();
 
         BooleanSpec booleanSpec = predicateSpec.path(servicePath);
-        if (StringUtils.hasLength(apiRoute.getMethod()) && !apiRoute.getMethod().equals("*")) {
-            // Empty == Allow All
-            if (apiRoute.getMethod().equals("!GET")) {
-                booleanSpec.and().method("POST", "DELETE", "HEAD", "PUT", "OPTIONS", "PATCH", "TRACE", "CONNECT");
-            } else {
-                booleanSpec.and().method(apiRoute.getMethod(), "HEAD", "OPTIONS");
-            }
+        if (StringUtils.hasLength(apiRoute.getMethod()) && !apiRoute.getMethod().equals("*")) { // * === All Allow
+            booleanSpec.and().method(apiRoute.getMethod(), "HEAD", "OPTIONS");
         }
 
 

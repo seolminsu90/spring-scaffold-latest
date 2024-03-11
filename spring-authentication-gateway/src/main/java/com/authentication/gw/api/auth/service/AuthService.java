@@ -55,9 +55,9 @@ public class AuthService {
                                  .switchIfEmpty(createNewUserAndLogin(ldapUser, request));
     }
 
-    private Mono<LoginAuthUserServiceRes> insertNewRecord(String uid, String service, String role) {
-        return authUserServiceRepository.saveAuthUserService(uid, service, role)
-                                        .then(Mono.just(new LoginAuthUserServiceRes(uid, service, role)))
+    private Mono<LoginAuthUserServiceRes> insertNewRecord(String uid, String service) {
+        return authUserServiceRepository.saveAuthUserService(uid, service, DEFAULT_ROLE_NAME)
+                                        .then(Mono.just(new LoginAuthUserServiceRes(uid, service, DEFAULT_ROLE_NAME)))
                                         .onErrorMap(e -> new ApiException(HttpStatus.BAD_REQUEST,
                                             ApiStatus.BAD_REQUEST_SERVICE));
     }
@@ -66,8 +66,8 @@ public class AuthService {
         Mono<LoginAuthUserServiceRes> roleMono;
         if (StringUtils.hasLength(request.getService())) {
             roleMono = authUserServiceRepository.findAuthUserServiceRole(authUser.getUid(), request.getService())
-                                                .switchIfEmpty(insertNewRecord(authUser.getUid(), request.getService(),
-                                                    DEFAULT_ROLE_NAME));
+                                                .switchIfEmpty(insertNewRecord(authUser.getUid(),
+                                                    request.getService()));
         } else {
             roleMono = Mono.just(new LoginAuthUserServiceRes(authUser.getUid(), null, authUser.isAdmin() ?
                 ADMIN_ROLE_NAME : DEFAULT_ROLE_NAME));

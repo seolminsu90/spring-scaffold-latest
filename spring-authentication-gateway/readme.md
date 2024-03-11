@@ -1,6 +1,7 @@
 # spring authentication gateway
 
-부트3기반의 게이트웨이 인증 통합 샘플 예시
+부트3기반의 게이트웨이 인증 통합 샘플 예시   
+적당히 설정 같은 것 부분적으로 참조해서 사용하면 될듯   
 
 - spring boot 3
 - spring cloud gateway (netty)
@@ -38,6 +39,13 @@ public static final String ROLE_PREFIX = "ROLE_";                   // 권한 �
 ```
 > 권한의 설계는 정책별로 자유이며, 대강 이렇게도 된다는 식의 코드 부분부분적인 레벨을 제어
 
+
+**GW 기능의 권한 처리**
+```
+@Secured({"ROLE_SERVICE_ADMIN", "ROLE_SYSADMIN"}) // -- Not Work !
+@PreAuthorize("hasAnyRole('SERVICE_ADMIN', 'SYSADMIN')") // --- Work !
+```
+
 #### 사용 예시
 
 1. authentication.api_service에 서비스를 등록한다.
@@ -50,8 +58,9 @@ public static final String ROLE_PREFIX = "ROLE_";                   // 권한 �
    - method는 현재는 단일 Method나, 내부 코드 수정을 통해 *과 같은 다중 처리의 형태도 추가할 수 있다. (현재 공백 => 전체 Method임)
    - permit_all은 인증되지 않은 모든 사용자도 접근 가능하게 하는 Flag이다.
 3. 호출
-   - Method GW-HOST:GW-PORT/[service-name]/[service-api-routes] 의 방식으로 호출하면 된다.
+   - Method GW-HOST:GW-PORT/[service-name(Uppercase)]/[service-api-routes] 의 방식으로 호출하면 된다.
    - 내부 GW의 기능은 별도 정의된 SecurityConfig 및 권한 처리로 처리한다.
+   - Eureka로부터 등록된 기본 route의 servicename이 대문자이므로 대문자로 통일해서 사용
 
 #### swagger 
 
