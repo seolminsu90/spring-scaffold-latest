@@ -104,6 +104,17 @@ public class JWTUtil {
         }
     }
 
+    // withoutSignature
+    public static Claims parseJWT(String token) {
+        try {
+            int i = token.lastIndexOf('.');
+            String withoutSignature = token.substring(0, i + 1);
+            return Jwts.parser().parseClaimsJwt(withoutSignature).getBody();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public static Collection<GrantedAuthority> setAuthorities(List<String> auth_list) {
         List<GrantedAuthority> authorities = new ArrayList<>();
         auth_list.forEach(authority -> authorities.add(new SimpleGrantedAuthority(authority)));
