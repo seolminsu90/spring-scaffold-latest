@@ -1,17 +1,18 @@
 package com.authentication.gw.api.auth.controller;
 
-import com.authentication.gw.api.auth.model.auth.AuthAuthorityReq;
-import com.authentication.gw.api.auth.model.auth.AuthUserRes;
-import com.authentication.gw.api.auth.model.auth.AuthUserServiceReq;
-import com.authentication.gw.api.auth.model.auth.AuthUserServiceRes;
+import com.authentication.gw.api.auth.model.auth.*;
 import com.authentication.gw.api.auth.service.AuthService;
 import com.authentication.gw.api.gateway.routes.model.ApiRouteRes;
 import com.authentication.gw.api.gateway.routes.service.ApiRouteService;
+import com.authentication.gw.common.model.ApiResponse;
+import com.authentication.gw.common.model.ApiStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -24,45 +25,70 @@ public class AuthController {
     private final ApiRouteService apiRouteService;
     private final AuthService authService;
 
-    @GetMapping("/authorities")
-    @Operation(summary = "권한 목록 조회")
-    public Mono<ResponseEntity<List<ApiRouteRes>>> getAllByService(@RequestParam(name = "serviceName") String serviceName) {
-        return apiRouteService.getAllByService(serviceName)
-                              .collectList()
-                              .map(routes -> ResponseEntity.ok()
-                                                           .body(routes))
-                              .defaultIfEmpty(ResponseEntity.notFound()
-                                                            .build());
-    }
-
     @GetMapping("/users")
     @Operation(summary = "모든 유저 조회")
-    public Mono<ResponseEntity<List<AuthUserRes>>> getAllUsersByService(@RequestParam(name="service") String service) {
+    public Mono<ResponseEntity<ApiResponse<List<AuthUserRes>>>> getAllUsers(@RequestParam(name = "service") String service) {
         return authService.findAllUser(service)
                           .map(AuthUserRes::of)
                           .collectList()
                           .map(routes -> ResponseEntity.ok()
-                                                       .body(routes))
+                                                       .body(new ApiResponse<>(ApiStatus.SUCCESS, routes)))
                           .defaultIfEmpty(ResponseEntity.notFound()
                                                         .build());
     }
 
     @PutMapping("/users/{uid}/service/{service}")
     @Operation(summary = "유저 서비스 권한 변경")
-    public Mono<ResponseEntity<AuthUserServiceRes>> saveUserServiceRole(@PathVariable("uid") String uid,
-                                                                        @PathVariable("service") String service,
-                                                                        @RequestBody @Valid AuthUserServiceReq request) {
-        return authService.saveUserServiceRole(uid, service, request.getRole())
-                          .map(res -> ResponseEntity.ok()
-                                                    .body(res));
+    public Mono<ResponseEntity<ApiResponse<AuthUserServiceRes>>> saveUserServiceRole(
+        @AuthenticationPrincipal Mono<Authentication> auth,
+        @PathVariable("uid") String uid,
+        @PathVariable("service") String service,
+        @RequestBody @Valid AuthUserServiceReq request) {
+
+        return auth.flatMap(authentication -> authService.saveUserServiceRole(authentication, uid, service,
+                       request.getRole()))
+                   .map(res -> ResponseEntity.ok()
+                                             .body(new ApiResponse<>(ApiStatus.SUCCESS, res)));
+
     }
 
-    @PostMapping("/roles/{role}/authorities")
-    @Operation(summary = "역할 권한 수정")
-    public Mono<ResponseEntity<?>> saveRoleAuthorities(@PathVariable("role") String role,
-                                                       @RequestBody AuthAuthorityReq request) {
-        return authService.saveRoleAuthorities(role, request.getAuthorities())
+    @GetMapping("/services")
+    @Operation(summary = "서비스 조회")
+    public Mono<ResponseEntity<ApiResponse<List<ApiServiceRes>>>> getServices()
+
+    {
+        return authService.getServices()
                           .collectList()
-                          .map(res -> ResponseEntity.ok().body(res));
+                          .map(res -> ResponseEntity.ok().body(new ApiResponse<>(ApiStatus.SUCCESS, res)));
+    }
+
+    @PostMapping("/services/{service}/roles/{role}/authorities")
+    @Operation(summary = "서비스 역할의 권한 수정")
+    public Mono<ResponseEntity<ApiResponse<?>>> saveRoleAuthorities(@PathVariable("role") String role,
+                                                                    @PathVariable("service") String service,
+                                                                    @RequestBody @Valid AuthAuthorityReq request) {
+        return authService.saveRoleAuthorities(role, service, request.getAuthorities())
+                          .map(res -> ResponseEntity.ok().body(new ApiResponse<>(ApiStatus.SUCCESS, res)));
+    }
+
+    @GetMapping("/services/{service}/roles")
+    @Operation(summary = "서비스 역할 조회")
+    public Mono<ResponseEntity<ApiResponse<List<AuthRoleAuthorityRes>>>> getServiceRoleAuthorities(@PathVariable(
+        "service") String service) {
+        return authService.getServiceRoleAuthorities(service)
+                          .map(res -> ResponseEntity.ok().body(new ApiResponse<>(ApiStatus.SUCCESS, res)));
+    }
+
+
+    @GetMapping("/services/{service}/authorities")
+    @Operation(summary = "서비스 모든 권한 조회")
+    public Mono<ResponseEntity<ApiResponse<List<ApiRouteRes>>>> getServiceAuthorities(@PathVariable(
+        "service") String service) {
+        return apiRouteService.getAllByService(service)
+                              .collectList()
+                              .map(routes -> ResponseEntity.ok()
+                                                           .body(new ApiResponse<>(ApiStatus.SUCCESS, routes)))
+                              .defaultIfEmpty(ResponseEntity.notFound()
+                                                            .build());
     }
 }

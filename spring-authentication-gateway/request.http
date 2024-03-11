@@ -4,7 +4,8 @@ Content-Type: application/json
 
 {
   "username": "msuseol",
-  "password": "!gkehdbs1234"
+  "password": "***",
+  "service": "releaseweb"
 }
 
 ### 인증 요청 테스트 (Admin)
