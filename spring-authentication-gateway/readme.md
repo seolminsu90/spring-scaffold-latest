@@ -1,7 +1,7 @@
 # spring authentication gateway
 
 부트3기반의 게이트웨이 인증 통합 샘플 예시   
-적당히 설정 같은 것 부분적으로 참조해서 사용하면 될듯   
+추후 개발 시 적당히 설정 정도만(GW, Filter, Auth, Logging, ExceptionHandling, Openapi 설정 등등...) 부분적으로 참조해서 사용하면 될듯
 
 - spring boot 3
 - spring cloud gateway (netty)
@@ -23,7 +23,7 @@
 관련해서는 정책에 따라 로그인 시의 권한 부여를 고민하고 수정해도 된다.   
 
 
-#### 권한 구조
+#### 구상한 권한 구조
 
 슈퍼 어드민(모든 서비스) >>> 서비스 어드민(개별 서비스) >>> 일반 유저(개별 서비스 권한)   
 서비스 어드민이 GW내 기능 중 다른 서비스의 어드민 기능을 사용 가능한 상태, 필요시 Token에 로그인 별 서비스를 넣어서 서비스별 권한 또한 구분할 수 있음.   
@@ -61,6 +61,9 @@ public static final String ROLE_PREFIX = "ROLE_";                   // 권한 �
    - Method GW-HOST:GW-PORT/[service-name(Uppercase)]/[service-api-routes] 의 방식으로 호출하면 된다.
    - 내부 GW의 기능은 별도 정의된 SecurityConfig 및 권한 처리로 처리한다.
    - Eureka로부터 등록된 기본 route의 servicename이 대문자이므로 대문자로 통일해서 사용
+
+
+> 현재 내부 기능들은 권한 처리 따로 분류해서 하지는 않은 상태임.
 
 #### swagger 
 

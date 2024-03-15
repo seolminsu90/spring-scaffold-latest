@@ -18,7 +18,7 @@
 
     <logger name="com.netflix.eureka" level="OFF" />
 
-    <root level="info">
+    <root level="debug">
       <appender-ref ref="STDOUT"/>
     </root>
   </springProfile>

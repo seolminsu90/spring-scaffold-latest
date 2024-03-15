@@ -2,12 +2,14 @@ package com.authentication.gw.api;
 
 import com.authentication.gw.common.util.JWTUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.security.access.annotation.Secured;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
@@ -17,9 +19,31 @@ import java.util.Map;
 
 import static com.authentication.gw.common.ServiceConst.ADMIN_ROLE_NAME;
 
+@Slf4j
 @RestController
 @Tag(name = "샘플")
 public class SampleController {
+
+    // 단순 Auth 출력
+    @GetMapping("/greeting")
+    @PreAuthorize("@authorizedProcess.apply(authentication)")
+    public Mono<String> greeting() {
+        return Mono.just("Authorized 된 유저의 이름을 로그에 출력합니다.");
+    }
+
+    // 함수형 인터페이스 사용
+    @GetMapping("/greeting2")
+    @PreAuthorize("@authorizedProcessWithParam.apply(authentication, #name)")
+    public Mono<String> greeting2(@P("name") @RequestParam(name = "name") String name) {
+        return Mono.just(String.format("Authorized 된 유저의 이름이 %s과 일치하면 로그에 출력합니다.", name));
+    }
+
+    // 일반 메서드 빈 사용
+    @GetMapping("/greeting3")
+    @PreAuthorize("@authorizedFunction.authorizedSelf(authentication, #name)")
+    public Mono<String> greeting3(@P("name") @RequestParam(name = "name") String name) {
+        return Mono.just(String.format("Authorized 된 유저의 이름이 %s과 일치하면 로그에 출력합니다.", name));
+    }
 
     @GetMapping("/token/admin")
     public Mono<String> getToken() {
@@ -45,9 +69,10 @@ public class SampleController {
                                             });
     }
 
-    @PreAuthorize("hasAnyRole('SERVICE_ADMIN', 'SYSADMIN')")// @PreAutorize 는 안되는데 왜그렇지?
+    @PreAuthorize("hasAnyRole('SERVICE_ADMIN', 'SYSADMIN')")
     @GetMapping("/token/me2")
-    public Mono<Map<String, Object>> getSessionData2(@AuthenticationPrincipal Mono<Authentication> auth) {
+    public Mono<Map<String, Object>> getSessionData2(@AuthenticationPrincipal Mono<Authentication> auth) { // Mono가
+        // 아니어도 됨.
         return auth
             .map(authentication -> {
                 Map<String, Object> sessionData = new HashMap<>();

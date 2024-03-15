@@ -11,12 +11,22 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.support.WebExchangeBindException;
+import org.springframework.web.server.MethodNotAllowedException;
 import org.springframework.web.server.handler.ResponseStatusExceptionHandler;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestControllerAdvice
 public class CustomRestExceptionHandler extends ResponseStatusExceptionHandler {
+
+    @ExceptionHandler(MethodNotAllowedException.class)
+    public Mono<ResponseEntity<?>> handleMethodNotAllowedException(MethodNotAllowedException ex) {
+
+        ApiResponse<?> res = new ApiResponse<>(ApiStatus.BAD_REQUEST, ex.getMessage());
+        return Mono.just(ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
+                                       .contentType(MediaType.APPLICATION_JSON)
+                                       .body(res));
+    }
 
     @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
     public Mono<ResponseEntity<?>> handleAuthenticationCredentialsNotFoundException(AuthenticationCredentialsNotFoundException ex) {

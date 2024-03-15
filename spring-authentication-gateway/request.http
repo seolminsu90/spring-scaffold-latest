@@ -4,74 +4,20 @@ Content-Type: application/json
 
 {
   "username": "msuseol",
-  "password": "***",
-  "service": "releaseweb"
+  "password": "!gkehdbs1234"
 }
 
-### 인증 요청 테스트 (Admin)
-GET http://localhost:8080/token/admin
+### 권한체크1
+GET http://localhost:8080/greeting
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiU1lTQURNSU4iLCJhdXRoIjpbXSwiaWQiOiJtc3VzZW9sIiwiZXhwIjoxNzEwNDY2Mzc2fQ.gblRY0jW3oykTXLXDx1Kif9Sqh1IgKtYVr--8qPvyLwqLHCLJR1WIXePnE0CUPhutS0s7EETnwQNoI40B8an2Q
 
-
-### 인증 요청 테스트
-POST http://localhost:8080/SAMPLE/hello
+### 권한체크2
+GET http://localhost:8080/greeting2?name=msseol
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiU1lTQURNSU4iLCJhdXRoIjpbXSwiaWQiOiJtc3VzZW9sIiwiZXhwIjoxNzEwNDY4NzQyfQ.tLQv6OjS5AhwbEUgM63IYsmUgPJ3al85zy7aWvdrAwvjJYOx-etFcS23edT0SOLLvan0ljKBWpjLywyFKhSbhg
 
-{
-  "Logging": "Hi"
-}
-
-### 인증 요청 테스트
-GET http://localhost:8080/token/me
+### 권한체크3
+GET http://localhost:8080/greeting3?name=msseol
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiU1lTQURNSU4iLCJhdXRoIjpbXSwiaWQiOiJtc3VzZW9sIiwiZXhwIjoxNzA5NzkzMzUzfQ.wlZjyIZK3SvQ9nm6dpfGoyL4nddnj1FWY5hJFSiCYyDXLQWpOcjm5ZPWaO5nLlwO1OgY4Z_XP-wfh20sosOWEQ
-
-
-### 인증 요청 테스트2
-GET http://localhost:8080/token/me2
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiTk9ORSIsImF1dGgiOlsibmV3LnNhbXBsZS5oYWhhMiJdLCJpZCI6Im1zdXNlb2wiLCJleHAiOjE3MDkxOTI4MDl9.6IracsOsDHxKjgaybRA9jvg6gqXxCLiMYuMHBGMoPAALzPzWEB588AV6-YElYZyWPFDwHc170-abUFVVKDnFXQ
-
-
-### 인증 요청 테스트3
-GET http://localhost:8080/greeting/user3
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiU1lTQURNSU4iLCJhdXRoIjpbXSwiaWQiOiJtc3VzZW9sIiwiZXhwIjoxNzA5MTkyNzAzfQ.uKgWpNbG9a28hUeOuLQL2SsoVVWQFNgDittbDRbC6LMXmXw0rUnMc_sOOxf-KTEtZj_H4HXOLP_AvqWHsmQEBQ
-
-
-### 인증 요청 테스트
-GET http://localhost:8080/test/hello
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiU1lTQURNSU4iLCJhdXRoIjpbXSwiaWQiOiJtc3VzZW9sIiwiZXhwIjoxNzA5MTkyNzAzfQ.uKgWpNbG9a28hUeOuLQL2SsoVVWQFNgDittbDRbC6LMXmXw0rUnMc_sOOxf-KTEtZj_H4HXOLP_AvqWHsmQEBQ
-
-
-### 라우트 생성
-POST http://localhost:8080/routes
-Content-Type: application/json
-
-{
-  "service": "new-service",
-  "uri": "http://localhost:3000",
-  "routes": [
-    {
-      "routeId": "test.post.read",
-      "path": "/test/**",
-      "method": "GET",
-      "desc": "1이 0이안되네.",
-      "permitAll": 0
-    },
-    {
-      "routeId": "new.sample.haha",
-      "path": "/test/helloworld",
-      "method": "GET",
-      "desc": "신규 권한",
-      "permitAll": 0
-    },{
-      "routeId": "new.sample.haha2",
-      "path": "/test/helloworld2",
-      "method": "GET",
-      "desc": "신규 권한2",
-      "permitAll": 1
-    }
-  ]
-}
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiU1lTQURNSU4iLCJhdXRoIjpbXSwiaWQiOiJtc3VzZW9sIiwiZXhwIjoxNzEwNDY4NzQyfQ.tLQv6OjS5AhwbEUgM63IYsmUgPJ3al85zy7aWvdrAwvjJYOx-etFcS23edT0SOLLvan0ljKBWpjLywyFKhSbhg
