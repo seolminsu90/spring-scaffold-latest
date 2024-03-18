@@ -1,8 +1,12 @@
 package com.authentication.gw.api;
 
+import com.authentication.gw.common.model.ApiResponse;
+import com.authentication.gw.common.model.ApiStatus;
 import com.authentication.gw.common.util.JWTUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,8 +25,10 @@ import static com.authentication.gw.common.ServiceConst.ADMIN_ROLE_NAME;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @Tag(name = "샘플")
 public class SampleController {
+    private final SampleService sampleService;
 
     // 단순 Auth 출력
     @GetMapping("/greeting")
@@ -81,5 +87,17 @@ public class SampleController {
                 sessionData.put("authorities", authentication != null ? authentication.getAuthorities() : null);
                 return sessionData;
             });
+    }
+
+    @GetMapping("/circuit")
+    public Mono<String> circuitTest() {
+        return sampleService.greeting();
+    }
+
+
+    // common fallback
+    @GetMapping("/fallback")
+    public Mono<ResponseEntity<ApiResponse<?>>> fallback() {
+        return Mono.just(ResponseEntity.ok().body(new ApiResponse<>(ApiStatus.INTERNAL_SERVER_ERROR, "Fallback.")));
     }
 }

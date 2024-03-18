@@ -34,12 +34,15 @@ dependencies {
 
     implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 
     // https://mvnrepository.com/artifact/org.springframework.ldap/spring-ldap-core
     implementation("org.springframework.ldap:spring-ldap-core:3.2.2")
 
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-webflux-ui
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0")
+
+    implementation("org.springframework.boot:spring-boot-starter-aop")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
