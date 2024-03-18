@@ -8,9 +8,10 @@
 - spring security
 - 동적 route
 - swagger(openapi)
+- resilience4j sample
 
 > 게이트웨이 필터에서 라우트 별 권한 처리를 전부 다 하고 있어서 router target들에는 spring security는 크게 의미가 있진 않은 상태임 (게이트웨이 API 보안 처리)
-> 라우트의 동적 등록, 갱신, 기본 필터 처리정도만 되어있다. 인증 및 예외 처리 응답 및 캐싱, fallback, 서킷브레이커 등 상세 설정은 알아서 따로 해야한다.
+> 라우트의 동적 등록, 갱신, 기본 필터 처리정도만 되어있다. 인증 및 예외 처리 응답 및 캐싱 등 상세 설정은 알아서 따로 해야한다.
 > 어드민 페이지 등등 필요에 의해 구현하면 된다. (나중에 심심하면 thymeleaf 로 구축?)
 
 ![img.png](img.png)
