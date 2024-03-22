@@ -3,8 +3,6 @@ package com.authentication.gw.common.gateway;
 
 import com.authentication.gw.api.gateway.logs.entity.ApiLog;
 import com.authentication.gw.api.gateway.logs.service.ApiLogService;
-import com.authentication.gw.common.logging.LoggingRequestDecorator;
-import com.authentication.gw.common.logging.LoggingWebExchange;
 import com.authentication.gw.common.model.SessionUserDetails;
 import com.authentication.gw.common.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +12,13 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.Objects;
 import java.util.UUID;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
 @Component
@@ -34,27 +35,37 @@ public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory<Lo
             if (user != null) exchange.getAttributes().put("user", user);
 
             return chain.filter(exchange).publishOn(Schedulers.boundedElastic())
-                        .doOnTerminate(() -> apiLogService.saveApiLog(createLog(user, exchange))
-                                                      .subscribeOn(Schedulers.boundedElastic())
-                                                      .subscribe())
+                        .doOnTerminate(() ->
+                            readBodyString(request)
+                                .flatMap(bodyString -> apiLogService.saveApiLog(createLog(user, exchange, bodyString)))
+                                .subscribeOn(Schedulers.boundedElastic())
+                                .subscribe())
                         .then();
         };
     }
 
-    private ApiLog createLog(SessionUserDetails user, ServerWebExchange exchange) {
+    public Mono<String> readBodyString(ServerHttpRequest request) {
+        return request.getBody()
+                      .collectList()
+                      .map(buffers -> {
+                          var cachedBody = new StringBuilder();
+                          for (var buffer : buffers) cachedBody.append(UTF_8.decode(buffer.asByteBuffer()));
+                          return cachedBody.toString();
+                      }).switchIfEmpty(Mono.just(""));
+    }
+
+    private ApiLog createLog(SessionUserDetails user, ServerWebExchange exchange, String bodyString) {
         var request = exchange.getRequest();
         var response = exchange.getResponse();
-        var loggingExchange = (LoggingWebExchange) exchange;
-        var loggingRequestDecorator = (LoggingRequestDecorator) loggingExchange.getRequest();
 
-        log.info("Request Body: {}", loggingRequestDecorator.getCachedBody());
+        log.info("Request Body: {}", bodyString);
         log.info("Response Status: {}", response.getStatusCode());
 
         String txId = String.valueOf(UUID.randomUUID());
         return ApiLog.builder().txid(txId).username(user == null ? "" : user.getUsername())
                      .uri(request.getURI().toString()).method(request.getMethod().toString())
                      .code(Objects.requireNonNull(response.getStatusCode()).value())
-                     .params(loggingRequestDecorator.getCachedBody()).build();
+                     .params(bodyString).build();
     }
 
     private SessionUserDetails getAuthenticationFromHeader(ServerHttpRequest request) {
