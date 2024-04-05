@@ -35,7 +35,16 @@ public class LoggingGatewayFilterFactory extends AbstractGatewayFilterFactory<Lo
             if (user != null) exchange.getAttributes().put("user", user);
 
             return chain.filter(exchange).publishOn(Schedulers.boundedElastic())
+                        .doOnSuccess(s -> {
+                            // 토큰 검증 과정 중, 토큰 갱신이 필요할 경우 갱신 후 갱신된 Token을 전달해준다.
+                            if (user != null && user.getToken() != null) {
+                                var response = exchange.getResponse();
+                                var headers = response.getHeaders();
+                                headers.add("X-Refresh-Token", user.getToken());
+                            }
+                        })
                         .doOnTerminate(() ->
+                            // Reactor 동작 이후 바디를 읽고 로그를 저장한다.
                             readBodyString(request)
                                 .flatMap(bodyString -> apiLogService.saveApiLog(createLog(user, exchange, bodyString)))
                                 .subscribeOn(Schedulers.boundedElastic())
