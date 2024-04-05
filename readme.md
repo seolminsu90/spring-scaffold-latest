@@ -22,6 +22,8 @@ Spring cloud gateway + dynamic routing sample
 - 기타 설정은 생략함
 - spring data r2dbc 관련 메모
 
+> 관련하여 개발해보니 인증 중 Spring security 와 통합하는건 비추천. 각종 필터가 중복되서 무의미한 행위가 늘어나게된다. 그냥 인증을 분리하거나, 내부로직 또한 Gateway route에 녹여서 사용하는게 좋을듯.
+
 ### Spring scaffold boot3
 
 Spring 3.x 기반의 샘플 모음
