@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -21,6 +22,10 @@ public class SecurityConfig {
     private final ServerAuthenticationEntryPoint restAuthenticationEntryPoint;
     private final AuthenticationTokenProcessingFilter authenticationTokenProcessingFilter;
 
+    @Bean
+    public WebSecurityCustomizer ignoringCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/favicon.ico");
+    }
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) { // 변경된 부분
         http
