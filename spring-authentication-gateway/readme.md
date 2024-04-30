@@ -47,6 +47,24 @@ public static final String ROLE_PREFIX = "ROLE_";                   // 권한 �
 @PreAuthorize("hasAnyRole('SERVICE_ADMIN', 'SYSADMIN')") // --- Work !
 ```
 
+#### 권한토큰을 jwt + (db,redis등)을 사용할 경우
+
+GatewayFilter에서 jwt인증 후 권한 목록을 가져올 때, 인증 정보가 없을 때 Mono.empty()로 처리해서 filter 처리 시, stream이 이상해지게 된다.   
+권한이 없거나 만료된 사용자의 경우 아래 처럼 anonymous 사용자로 대체하여 사용한다.
+
+```java
+public static Authentication anonymousAuthentication() {
+        var user = anonymousUserDetail();
+        return new AnonymousAuthenticationToken("anonymousUser", user, user.getAuthorities());
+}
+
+public static SessionUserDetails anonymousUserDetail() {
+        return new SessionUserDetails("anonymousUser", 0, Collections.emptyMap(),
+            Collections.singletonList(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
+}
+```
+
+
 #### 사용 예시
 
 1. authentication.api_service에 서비스를 등록한다.
